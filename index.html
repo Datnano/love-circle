@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đạt Nano</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 0 0 10px #f1c40f, 0 0 20px #f1c40f;
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            animation: textColorChange 6s ease-in-out infinite, floatUp 3s ease-in-out infinite;
+        }
+
+        @keyframes textColorChange {
+            0% {
+                color: white;
+                text-shadow: 0 0 10px #f1c40f, 0 0 20px #f1c40f;
+            }
+            100% {
+                color: #f8bbd0; /* Màu hồng nhạt */
+                text-shadow: 0 0 20px #f8bbd0, 0 0 30px #f8bbd0;
+            }
+        }
+
+        @keyframes floatUp {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        #wheel-container {
+            position: absolute;
+            top: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#9b59b6 0% 99%, #f06292 99% 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 4s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.7); /* Ánh sáng nhẹ phát ra từ vòng tròn */
+            animation: glowingEffect 4s ease-in-out infinite;
+        }
+
+        @keyframes glowingEffect {
+  		  0% {
+   		     box-shadow: 0 0 15px rgba(255, 105, 180, 0.7), 0 0 30px rgba(255, 105, 180, 0.5);
+   		 }
+   		 50% {
+    		    box-shadow: 0 0 30px rgba(255, 105, 180, 0.7), 0 0 50px rgba(255, 105, 180, 0.5);
+   		 }
+    		100% {
+     		   box-shadow: 0 0 15px rgba(255, 105, 180, 0.7), 0 0 30px rgba(255, 105, 180, 0.5);
+    		}
+		}
+
+        #spinText {
+            font-size: 2rem;
+            color: white;
+            text-shadow: 0 0 10px #f1c40f, 0 0 20px #f1c40f;
+            animation: textColorChange 6s ease-in-out infinite, floatUp 3s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        #spinBtn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #spinBtn:hover {
+            background-color: #2980b9;
+        }
+
+        #arrow {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%) rotate(180deg);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid white;
+        }
+
+        #chuchith {
+            font-size: 1.1rem;
+            font-weight: bold;
+            position: absolute;
+            top: 700px;
+            left: 5%;
+            transform: translateX(-50%);
+            color: white;
+            text-shadow: 0 0 10px #f06292, 0 0 20px #f06292;
+            animation: floatUp 3s ease-in-out infinite, glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 10px #f06292, 0 0 20px #f06292;
+            }
+            50% {
+                text-shadow: 0 0 20px #f06292, 0 0 30px #f06292;
+            }
+            100% {
+                text-shadow: 0 0 10px #f06292, 0 0 20px #f06292;
+            }
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 1.7rem;
+            color: white;
+            position: absolute;
+            top: 530px;
+            width: 100%;
+            text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px #f06292, 0 0 40px #f06292;
+            transition: opacity 0.3s ease, color 0.3s ease;
+            animation: floatUp 3s ease-in-out infinite;
+        }
+
+        /* Mưa sao băng */
+		.shooting-stars {
+  		  position: absolute;
+  		  top: 0;
+  		  left: 0;
+  		  width: 100vw;
+  		  height: 100vh;
+  		  pointer-events: none;
+  		  z-index: 1;
+  		  overflow: hidden;
+		}
+
+		.shooting-star {
+  		  position: absolute;
+  		  width: 10px; /* Kích thước sao */
+  		  height: 10px;
+  		  background-color: white;
+  		  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); /* Ngôi sao 5 cánh */
+  		  opacity: 0;
+ 		   animation: shoot 10s infinite linear, tail 7s infinite linear; /* Thêm hiệu ứng vệt sáng */
+ 		   box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8); /* Vệt sáng đằng sau sao */
+		}		
+
+		@keyframes shoot {
+  		  0% {
+  		      transform: translateY(-100vh) translateX(-100vw); /* Vị trí bắt đầu */
+  		      opacity: 1;
+  		  }
+  		  100% {
+  		      transform: translateY(100vh) translateX(100vw); /* Di chuyển chéo qua màn hình */
+  		      opacity: 0;
+ 		   }
+		}
+
+		/* Vệt sáng kéo dài theo sau sao */
+		@keyframes tail {
+ 		   0% {
+   		     box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8); /* Vệt sáng gần sao */
+   		 }
+   		 100% {
+   		     box-shadow: 0 0 60px 30px rgba(255, 255, 255, 0.2); /* Vệt sáng dài dần */
+   		 }
+		}
+
+        /* Lấp lánh */
+        .twinkling-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 1.5s infinite alternate, fadeOut 3s ease-out forwards;
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Di chuyển âm thanh MP3 xuống dưới phần thông báo */
+        #audio-container {
+            position: absolute;
+            top: 630px; /* Đặt phần âm thanh MP3 dưới thông báo */
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Em xin lỗi, chị tha lỗi cho em nhé?</h1>
+    <div id="wheel-container">
+        <div id="arrow"></div>
+        <div id="wheel">
+            <div id="spinText">Quay</div>
+        </div>
+        <button id="spinBtn">Quay</button>
+    </div>
+    <div id="chuchith">
+        Chú thích: <br>
+        Màu tím: Tha Thứ<br>
+        Màu hồng: Không Tha Thứ
+    </div>
+    <div id="message"></div>
+
+    <!-- Mưa sao băng -->
+    <div class="shooting-stars" id="shootingStars"></div>
+
+    <!-- Lấp lánh -->
+    <div class="twinkling-stars" id="twinklingStars"></div>
+
+    <!-- Di chuyển phần âm thanh MP3 xuống dưới phần thông báo -->
+    <div id="audio-container">
+        <!-- Âm thanh MP3 tự động phát -->
+        <script type="text/javascript" src="https://files.fm/embed/player?hash=97kb8ngazm&w=100%&h=auto" id="filesfm_embed_js__97kb8ngazm"></script>
+    </div>
+
+    <script>
+ 		   const shootingStarsContainer = document.getElementById("shootingStars");
+   		 const twinklingStarsContainer = document.getElementById("twinklingStars");
+		
+   		 // Tạo sao băng
+   		 function createShootingStar() {
+   		     const shootingStar = document.createElement("div");
+   		     shootingStar.classList.add("shooting-star");
+   		     const startX = Math.random() * 100;
+   		     const startY = Math.random() * 100;
+   		     const endX = Math.random() * 100;
+   		     const endY = Math.random() * 100;
+		
+   		     shootingStar.style.left = `${startX}vw`;
+   		     shootingStar.style.top = `${startY}vh`;
+   		     shootingStarsContainer.appendChild(shootingStar);
+		
+   		     setTimeout(() => {
+   		         shootingStar.style.left = `${endX}vw`;
+   		         shootingStar.style.top = `${endY}vh`;
+   		     }, 0);
+		
+   		     // Loại bỏ sao băng sau khi hoàn thành
+   		     setTimeout(() => shootingStar.remove(), 10000);
+   			 }
+		
+   		 // Tạo hiệu ứng lấp lánh
+   		 function createTwinklingStar() {
+   		     const star = document.createElement("div");
+   		     star.classList.add("star");
+   		     const left = Math.random() * 100;
+   		     const top = Math.random() * 100;
+   		     star.style.left = `${left}vw`;
+   		     star.style.top = `${top}vh`;
+   		     star.style.animationDelay = `${Math.random() * 3}s`; // Tạo độ trễ ngẫu nhiên
+		
+   		     twinklingStarsContainer.appendChild(star);
+		
+   		     // Loại bỏ sao sau khi hoàn thành
+   		     setTimeout(() => star.remove(), 5000 + Math.random() * 3000); // Thời gian sống từ 5-8 giây
+   		 }
+	
+   		 // Gọi hàm để tạo sao băng và lấp lánh
+   		 setInterval(createShootingStar, 3000); // Tạo sao băng mỗi 3 giây
+   		 setInterval(() => {
+   		     createTwinklingStar();
+   		 }, 200); // Tạo ngôi sao lấp lánh mới mỗi 200ms
+				
+   		 // Xử lý quay vòng quay (không thay đổi)
+   		 const wheel = document.getElementById("wheel");
+   		 const spinBtn = document.getElementById("spinBtn");
+   		 const message = document.getElementById("message");
+   		 let isSpinning = false;
+		
+   		 window.onload = () => {
+   		     let initialSpin = Math.floor(Math.random() * 360);
+   		     wheel.style.transform = `rotate(${initialSpin}deg)`;
+   		 };
+		
+   		 spinBtn.addEventListener("click", () => {
+   		     if (isSpinning) return;
+   		     isSpinning = true;
+   		     spinBtn.disabled = true;
+		
+   		     let isPink = Math.random() < 0.01;
+   		     let randomDegree;
+   		     const offset = 0;
+		
+   		     if (isPink) {
+   		         randomDegree = 359.9 + Math.random() * 3.5 + offset;
+   		     } else {
+   		         randomDegree = Math.random() * 356.4 + offset;
+   		     }
+	
+   		     randomDegree += Math.floor(Math.random() * 10 + 5) * 360;
+		
+   		     wheel.style.transform = `rotate(${randomDegree}deg)`;
+		
+   		     const finalDegree = randomDegree % 360;
+   		     let result = finalDegree >= 356.5 || finalDegree <= 3.5 ? "Không Tha Thứ" : "Tha Thứ";
+   
+		        setTimeout(() => {
+  		          if (result === "Tha Thứ") {
+  		              const messages = [
+                            "Em yêu chị nhiều lắm🤗🤗",
+                            "Đúng là chỉ có chị thương em nhất😆",
+                            "Hứa bỏ qua chuyện này nha chị🤭",
+  		                  "Em cảm ơn chị đã tha lỗi cho em! 😊",
+  		                  "Cảm ơn chị rất nhiều vì đã rộng lượng tha thứ! 🙏",
+  		                  "Em cảm ơn chị vì sự bao dung và tha thứ! 💖",
+  		                  "Chị thật tuyệt vời, cảm ơn chị đã mở lòng tha lỗi cho em! 🌟"
+  		              ];
+  		              message.textContent = messages[Math.floor(Math.random() * messages.length)];
+  		              message.style.color = "#f06292"; // Đổi màu văn bản của phần Tha Thứ sang hồng
+  		          } else {
+  		              const messages = [
+                            "Có lẽ...mọi chuyện do em tạo nên😕"
+                            "Xin lỗi chị rất nhiều nhé, em sẽ không làm vậy nữa"
+  		                  "Rất tiếc, chị không tha thứ cho em... 😞",
+  		                  "Chị chưa sẵn sàng tha lỗi cho em, em hiểu mà... 💔",
+  		                  "Em xin lỗi chị, hy vọng chị sẽ thay đổi quyết định! 😔"
+  		              ];
+  		              message.textContent = messages[Math.floor(Math.random() * messages.length)];
+  		              message.style.color = "#f06292"; // Màu hồng cho Không Tha Thứ
+  		          }
+		
+  		          setTimeout(() => {
+  		              spinBtn.disabled = false;
+  		              isSpinning = false;
+  			          }, 2000);
+  		      }, 4000);
+  		  });
+		</script>
+</body>
+</html>
